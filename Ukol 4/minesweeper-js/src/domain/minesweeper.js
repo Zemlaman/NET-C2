@@ -20,7 +20,6 @@ export class Minesweeper {
             this.bombs = bombs;
 
         this.array = [];
-        this.bombLocation = [];
 
         for(let i = 0; i < rows; i++) {
             let k = [];
@@ -30,16 +29,17 @@ export class Minesweeper {
             this.array.push(k);
         }
 
+        this.bombLocation = [];
+
         for(let l = 0; l < bombs; l++) {
-        let x  = Math.floor(Math.random() * this.columns);
-        let y = Math.floor(Math.random() * this.rows);
+            let x  = Math.floor(Math.random() * this.columns);
+            let y = Math.floor(Math.random() * this.rows);
 
-        let coordinate = new Coordinate(x,y);
+            let coordinate = new Coordinate(x,y);
 
-        this.bombLocation.push(coordinate);
-
+            this.bombLocation.push(coordinate);
         }
-
+        console.log(this.bombLocation)
     }
 
     /**
@@ -50,8 +50,9 @@ export class Minesweeper {
      * @return {number} amount of bombs
      */
     _calculateDefaultBombs() {
-        return 10
+        return 5;
     }
+
 
     /**
      * TODO: IMPLEMENT THIS
@@ -62,17 +63,7 @@ export class Minesweeper {
      * @return {field}
      */
     getField(x, y) {
-        if(this.array[y][x] == field.hidden)
-        return this.array[y][x] = field.flag;
-
-        else if (this.array[y][x] == field.flag)
-        return this.array[y][x] = field.question_mark;
-
-        else if (this.array[y][x] == field.question_mark)
-        return this.array[y][x] = field.hidden;
-        
-        else
-        return this.array[y][x] = field.visible;
+        return this.array[x][y];
     }
     
 
@@ -84,7 +75,36 @@ export class Minesweeper {
      * @return {number}
      */
     getAmountOfSurroundingBombs(x, y) {
-        return 0;
+        let surroundingBombs = 0;
+
+        if(this.isBombOnPosition(y+1, x) === true)
+            surroundingBombs++;
+
+        if (this.isBombOnPosition(y, x+1) === true)
+            surroundingBombs++;
+
+        if (this.isBombOnPosition(y+1, x+1) === true)
+            surroundingBombs++;
+
+        if (this.isBombOnPosition(y-1, x) === true)
+            surroundingBombs++;
+
+        if (this.isBombOnPosition(y, x-1) === true)
+            surroundingBombs++;
+
+        if (this.isBombOnPosition(y-1, x-1) === true)
+            surroundingBombs++;
+
+        if (this.isBombOnPosition(y+1, x-1) === true)
+            surroundingBombs++;
+
+        if (this.isBombOnPosition(y-1, x+1) === true)
+            surroundingBombs++;
+
+            console.log(surroundingBombs);
+
+        return surroundingBombs++;
+
     }
 
     /**
@@ -95,7 +115,11 @@ export class Minesweeper {
      * @return {boolean}
      */
     isBombOnPosition(x, y) {
-        return true;
+        for(let i = 0; i < this.bombLocation.length; i++) {
+            if(this.bombLocation[i].x === x && this.bombLocation[i].y === y) 
+                return true;
+        }     
+        return false;
     }
 
     /**
@@ -106,8 +130,26 @@ export class Minesweeper {
      * @param {number} y
      */
     reveal(x, y) {
-        this.array[y][x] = field.visible;
+
+        if(this.isBombOnPosition(x, y) === false)
+            this.array[y][x] = field.visible;
+
+        else if(this.isBombOnPosition(x,y) === true) 
+            this.isGameOver = true;
+        else
+            this.array[y][x] = field.hidden;
     }
+
+    makeSpread(x,y) {
+        if (this.array[x][y] === field.hidden) {
+            this.array[x][y] = field.visible;
+            if (this.getAmountOfSurroundingBombs === 0) {
+                if (x  <= this.rows && x <= this.columns && y <= this.rows && y < this.columns)
+                    this.makeSpread();
+            }
+        }
+    }
+
 
     /**
      * TODO: IMPLEMENT THIS
@@ -118,7 +160,17 @@ export class Minesweeper {
     toggleFieldState(x, y) {
 
         if(this.array[y][x] == field.hidden)
-        return this.array[y][x] = field.visible;
+            this.array[y][x] = field.flag;
+
+        else if (this.array[y][x] == field.flag)
+            this.array[y][x] = field.question_mark;
+
+        else if (this.array[y][x] == field.question_mark)
+            this.array[y][x] = field.hidden;
+        
+        else
+            this.array[y][x] = field.visible;
+    
     }
 
     /**
@@ -127,7 +179,8 @@ export class Minesweeper {
      * @returns {boolean}
      */
     didWin() {
-
+        if(this.isGameOver === true)
+            return false;
     }
 
     /**
@@ -136,7 +189,8 @@ export class Minesweeper {
      * @returns {boolean}
      */
     didLoose() {
-        return false;
+        if(this.isGameOver === true)
+            return true;
     }
 
     /**
@@ -144,13 +198,7 @@ export class Minesweeper {
      * @return {number}
      */
     getRemainingBombCount() {
-        for(let i = 0; i < columns; i++) {
-            for(let s = 0; s < rows; s++){
-                if(coordinate == bombLocation){
-                    return 
-                }
-            }
-        }
+        return this.bombs;
     }
 
 }
