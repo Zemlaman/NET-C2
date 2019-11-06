@@ -144,7 +144,7 @@ export class Minesweeper {
         if (this.array[x][y] === field.hidden) {
             this.array[x][y] = field.visible;
             if (this.getAmountOfSurroundingBombs === 0) {
-                if (x  <= this.rows && x <= this.columns && y <= this.rows && y < this.columns)
+                if (x  >= 0 && x < this.rows && y >= 0 && y < this.columns)
                     this.makeSpread();
             }
         }
