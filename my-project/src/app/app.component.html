@@ -1,0 +1,23 @@
+<input [(ngModel)]="num1" type="number" name="num1">
+<input [(ngModel)]="num2" type="number" name="num2">
+
+<br>
+
+<button (click)="plus()">
+    +
+</button>
+<button (click)="minus()">
+    -
+</button>
+<button (click)="krat()">
+    x
+</button>
+<button (click)="deleno()">
+    %
+</button>
+
+<br>
+
+<div class="Vysledek">
+Vysledek: {{vysledek}}
+</div>
