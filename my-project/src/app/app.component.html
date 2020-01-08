@@ -1,0 +1,27 @@
+<div class="Kalkulacka">
+<input [(ngModel)]="num1" type="number" name="num1" placeholder="Zadej první číslo">
+<input [(ngModel)]="num2" type="number" name="num2" placeholder="Zadej druhé číslo">
+
+<br>
+
+<button class="button" (click)="plus()">
+    +
+</button>
+<button class="button" (click)="minus()">
+    -
+</button>
+<button class="button" (click)="krat()">
+    x
+</button>
+<button class="button" (click)="deleno()">
+    %
+</button>
+<button class="button" (click)="del()">
+    AC
+</button>
+
+<br>
+<div class="Vysledek">
+Výsledek: {{vysledek}}
+</div>
+</div>
